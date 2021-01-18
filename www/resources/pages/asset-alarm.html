@@ -53,7 +53,7 @@
                         <div class="item-inner">
                             <div class="item-title text-transform-uppercase tooltip-init" data-tooltip="{{@global.LANGUAGE.PROMPT_MSG036}}">{{@global.LANGUAGE.COM_MSG051}} <span class="badge color-lightblue">?</span></div>
                             <div class="item-after">
-                                <label class="toggle toggle-ignore-between color-green">
+                                <label class="toggle toggle-ignore-between color-custom">
                                     <input type="checkbox" name="IgnoreBetweenState" {{#if IgnoreBetweenState}}checked="checked"{{/if}}>
                                     <span class="toggle-icon"></span>
                                 </label>
@@ -105,6 +105,34 @@
             </div>
             {{/if}}
 
+            <div key="CoolRoomsList" class="list no-hairline-bottom no-margin-top">
+                <ul>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title text-transform-uppercase">{{@global.LANGUAGE.COOL_ROOMS_MSG00}}</div>
+                            <div class="item-after">
+                                <label class="toggle toggle-coolroom-alarm color-custom">
+                                    <input type="checkbox" name="checkbox-coolroom-all" {{#if TurnOnAll.state}}checked="checked"{{/if}}>
+                                    <span class="toggle-icon"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+
+                    {{#each CoolRoomAlarms}}
+                    <li>
+                        <label class="item-checkbox item-content color-custom">
+                            <input type="checkbox" name="checkbox-coolroom" value="{{this.val}}" {{#if this.state}}checked="checked"{{/if}}/>
+                            <i class="icon icon-checkbox"></i>
+                            <div class="item-inner">
+                                <div class="item-title">{{this.title}}</div>
+                            </div>
+                        </label>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+
             {{#if ShowAlarmList}}
                 <div key="AlarmList" class="list no-hairline-bottom no-margin-top">
                     <ul>
@@ -112,7 +140,7 @@
                             <div class="item-inner">
                                 <div class="item-title text-transform-uppercase">{{TurnOnAll.title}}</div>
                                 <div class="item-after">
-                                    <label class="toggle toggle-all-alarm color-green">
+                                    <label class="toggle toggle-all-alarm color-custom">
                                         <input type="checkbox" name="checkbox-alarm-all" {{#if TurnOnAll.state}}checked="checked"{{/if}}>
                                         <span class="toggle-icon"></span>
                                     </label>
@@ -122,7 +150,7 @@
 
                         {{#each Alarms}}
                         <li>
-                            <label class="item-checkbox item-content color-green">
+                            <label class="item-checkbox item-content color-custom">
                                 <input type="checkbox" name="checkbox-alarm" value="{{this.val}}" {{#if this.state}}checked="checked"{{/if}}/>
                                 <i class="icon icon-checkbox"></i>
                                 <div class="item-inner">
@@ -142,7 +170,7 @@
                             <div class="item-inner">
                                 <div class="item-title text-transform-uppercase tooltip-init" data-tooltip="{{@global.LANGUAGE.PROMPT_MSG033}}">{{@global.LANGUAGE.ASSET_ALARM_MSG32}} <span class="badge color-lightblue">?</span></div>
                                 <div class="item-after">
-                                    <label class="toggle color-green">
+                                    <label class="toggle color-custom">
                                         <input type="checkbox" name="checkbox-alarm" class="disablingController" value="67108864" {{#if OfflineState}}checked="checked"{{/if}}>
                                         <span class="toggle-icon"></span>
                                     </label>
@@ -151,7 +179,7 @@
                         </li>
                         {{#OfflineOptions}}
                         <li>
-                            <label class="item-checkbox item-content color-green {{#unless ../OfflineState}}disabled{{/unless}}">
+                            <label class="item-checkbox item-content color-custom {{#unless ../OfflineState}}disabled{{/unless}}">
                                 <input type="checkbox" name="offline-option" value="{{Value}}" {{#if State}}checked="checked"{{/if}}/>
                                 <i class="icon icon-checkbox"></i>
                                 <div class="item-inner">
@@ -169,7 +197,7 @@
                             <div class="item-inner">
                                 <div class="item-title text-transform-uppercase tooltip-init " data-tooltip="{{@global.LANGUAGE.PROMPT_MSG034}}<br>{{@global.LANGUAGE.PROMPT_MSG035}}">{{@global.LANGUAGE.ASSET_ALARM_MSG23}} <span class="badge color-lightblue">?</span></div>
                                 <div class="item-after">
-                                    <label class="toggle color-green">
+                                    <label class="toggle color-custom">
                                         <input type="checkbox" name="checkbox-alarm" class="disablingController" value="32" {{#if OverspeedState}}checked="checked"{{/if}}>
                                         <span class="toggle-icon"></span>
                                     </label>
@@ -177,7 +205,7 @@
                             </div>
                         </li>
                         <li>
-                            <label class="item-radio item-content color-green disablingObj {{#unless OverspeedState}}disabled{{/unless}}">
+                            <label class="item-radio item-content color-custom disablingObj {{#unless OverspeedState}}disabled{{/unless}}">
                                 <input type="radio" name="overspeed-type" value="1" {{#js_if ' !this.SpeedingMode || this.SpeedingMode == 1 '}} checked{{/js_if}}/>
                                 <i class="icon icon-radio"></i>
                                 <div class="item-inner">
@@ -187,7 +215,7 @@
                         </li>
 
                         <li>
-                            <label class="item-radio item-content color-green disablingObj {{#unless OverspeedState}}disabled{{/unless}}">
+                            <label class="item-radio item-content color-custom disablingObj {{#unless OverspeedState}}disabled{{/unless}}">
                                 <input type="radio" name="overspeed-type" value="2" {{#js_if ' this.SpeedingMode == 2 '}} checked{{/js_if}} />
                                 <i class="icon icon-radio"></i>
                                 <div class="item-inner">
@@ -294,7 +322,9 @@
                 AlarmListType: 3,
                 ShowAlarmList: false,
                 Alarms: [],
+                CoolRoomAlarms: [],
                 ToggleAllAlarms: false,
+                ToggleCoolRoomAlarms: false,
                 TurnOnAll: {
                     state: false,
                     title: LANGUAGE.ASSET_ALARM_MSG26,
@@ -465,6 +495,53 @@
                     });
                 }
             },
+            getAlarmOptionsCoolRoom(){
+                let self = this;
+                let list = [
+                    {
+                        val: 1,
+                        title: LANGUAGE.COOL_ROOMS_MSG01, //Temperature Alarm Low
+                    },
+                    {
+                        val: 2,
+                        title: LANGUAGE.COOL_ROOMS_MSG02, //Temperature Alarm High
+                    },
+                    {
+                        val: 3,
+                        title: LANGUAGE.COOL_ROOMS_MSG03, //Input One
+                    },
+                    {
+                        val: 4,
+                        title: LANGUAGE.COOL_ROOMS_MSG04, //Input Two
+                    },
+                    {
+                        val: 5,
+                        title: LANGUAGE.COOL_ROOMS_MSG05, //Low Battery
+                    },
+                    {
+                        val: 6,
+                        title: LANGUAGE.COOL_ROOMS_MSG06, //Ignition On
+                    },
+                    {
+                        val: 7,
+                        title: LANGUAGE.COOL_ROOMS_MSG07, //Ignition Off
+                    },
+                ]
+                list.sort(function(a,b){
+                    if(a.title < b.title) return -1;
+                    if(a.title > b.title) return 1;
+                    return 0;
+                });
+                self.loadAlarmListCoolRoom(list);
+            },
+            loadAlarmListCoolRoom(list){
+                this.$setState({
+                    CoolRoomAlarms: list
+                })
+                this.$app.utils.nextFrame(() => {
+                    this.initToggleCoolRoomAlarms();
+                });
+            },
             initIgnoreBetweenBlock: function(params = {}){
                 let self = this;
 
@@ -588,7 +665,7 @@
                     self.DaysOfWeekSelect = self.$app.smartSelect.create({
                         el: daysOfWeekEl,
                         openIn: 'sheet',
-                        formColorTheme: 'green',
+                        formColorTheme: 'custom',
                         sheetPush: 'true'
                     });
                 });
@@ -618,6 +695,27 @@
                         self.ToggleAllAlarms.toggle();
                     }
                 }
+            },
+            initToggleCoolRoomAlarms: function(alarmOptions = 0){
+                let self = this;
+                let checkboxes = self.$el.find('[name = "checkbox-coolroom"]');
+
+                self.ToggleCoolRoomAlarms = self.$app.toggle.create({
+                    el: self.$el.find('.toggle-coolroom-alarm'),
+                    on: {
+                        change: function () {
+                            for (let i = checkboxes.length - 1; i >= 0; i--) {
+                                checkboxes[i].checked = this.checked;
+                            }
+                        }
+                    }
+                });
+                /*alarmOptions = parseInt(alarmOptions,10);
+                if (alarmOptions === 0) {
+                    if (!self.ToggleCoolRoomAlarms.checked) {
+                        self.ToggleCoolRoomAlarms.toggle();
+                    }
+                }*/
             },
             getAlarmListByType: function(type, assetType, solutionType){
                 let self = this;
@@ -1143,6 +1241,7 @@
                 let form = page.$el.find('[name = "AssetAlarmForm"]');
 
                 self.getAlarmOptions();
+                self.getAlarmOptionsCoolRoom()
 
                 form.on('change', '.disablingController',function(e){
                     let parent = this.closest('.list');
@@ -1258,6 +1357,9 @@
 
                 if (self.ToggleAllAlarms) {
                     self.$app.toggle.destroy(self.ToggleAllAlarms);
+                }
+                if (self.ToggleCoolRoomAlarms) {
+                    self.$app.toggle.destroy(self.ToggleCoolRoomAlarms);
                 }
 
                 if (self.DaysOfWeekSelect) {

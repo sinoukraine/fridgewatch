@@ -222,7 +222,14 @@ var routes = [
             transition: 'f7-cover',
         },
     },
-
+    {
+        path: '/fridge-settings/',
+        componentUrl: './resources/pages/fridge-settings.html?v=1.3',
+        name: 'fridge-settings',
+        options: {
+            transition: 'f7-cover',
+        },
+    },
 
 
     // Default route (404 page). MUST BE THE LAST

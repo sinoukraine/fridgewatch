@@ -50,11 +50,11 @@ API_URL.GEOFENCE_DELETE = API_DOMIAN1 + "Device/FenceDelete";
 
 API_URL.URL_ROUTE = "https://www.google.com/maps/dir/?api=1&destination={0},{1}";
 API_URL.URL_ROUTE_IOS = "maps://maps.apple.com/maps?daddr={0},{1}";
-API_URL.URL_SUPPORT = "https://support.quiktrak.eu/";
+API_URL.URL_SUPPORT = "https://support.fridgewatch.quiktrak.eu/";
 API_URL.URL_REPORT_THEFT = "https://forms.quiktrak.com.au/report-theft/";
-API_URL.URL_UPGRADE = "https://app.quikprotect.co/activation2/";
+API_URL.URL_UPGRADE = "https://activation.fridgewatch.quiktrak.eu/";
 API_URL.REFERRAL_PROGRAM = "https://forms.quiktrak.com.au/referral-program/";
-API_URL.URL_USER_GUIDE = "https://quiktrak.com.au/pdf/manuals/qt-pro-app.pdf";
+API_URL.URL_USER_GUIDE = "https://helper.quiktrak.com.au/manuals/fridgewatch/fridgewatch-app.pdf";
 
 API_URL.GET_BALANCE = API_DOMIAN3 + "Balance";
 API_URL.EDIT_ACCOUNT = API_DOMIAN3 + "AccountEdit";
@@ -111,8 +111,8 @@ $$('#app').append(compiledTemplate());
 
 // Init App
 const app = new Framework7({
-    id: 'com.quiktrak.pro',
-    name: 'QuikTrak Pro',
+    id: 'com.fridgewatch.app',
+    name: 'Fridge Watch',
     root: '#app',
     theme: Framework7.device.ios ? 'ios' : 'md',
     view: {
@@ -180,9 +180,9 @@ const app = new Framework7({
                 },
             },
             AppDetails: {
-                name: 'QuikTrak-Pro-app',
-                code: 23,
-                supportCode: 3,
+                name: 'FridgeWatch-app',
+                code: 47,
+                supportCode: 47,
                 appId: '',
                 appleId: '1505742400',
                 appVersion: '',
@@ -470,7 +470,7 @@ const app = new Framework7({
             /*console.log('login')
             console.log(data)*/
 
-            self.dialog.progress(LANGUAGE.COM_MSG004,'red');
+            self.dialog.progress(LANGUAGE.COM_MSG004,'custom');
             self.request.promise.get(API_URL.LOGIN, data, 'json')
                 .then(function (result) {
                     if(result.data && result.data.MajorCode === '000') {

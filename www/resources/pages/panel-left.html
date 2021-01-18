@@ -7,7 +7,7 @@
                 <div class="toolbar-inner flex-direction-column bg-color-white no-padding">
                     {{#if ShowButtonReferFriend }}
                     <div class="width-100 ">
-                        <a href="#" @click="showReferralModal" class="button button-fill color-darkgray margin-horizontal margin-bottom"><i class="f7-icons icon-menu-refer vertical-align-middle size-18 margin-right-half"></i>{{@global.LANGUAGE.COM_MSG100}}</a>
+                        <a href="#" @click="showReferralModal" class="button button-fill color-custom-2 margin-horizontal margin-bottom"><i class="f7-icons icon-menu-refer vertical-align-middle size-18 margin-right-half"></i>{{@global.LANGUAGE.COM_MSG100}}</a>
                     </div>
                     {{/if}}
                     {{#if ShowButtonCall}}
@@ -24,13 +24,13 @@
             </div>
             <div class="page-content">
                 <div class="panel-header bg-custom bg-header">
-                    <span class="app-version text-color-white">{{AppVersion}}</span>
+                    <span class="app-version text-color-gray">{{AppVersion}}</span>
                     <div class="block no-margin padding">
                         <div class="logo">
                             <img src="{{Logo}}" alt="">
                         </div>
-                        <p class="text-color-white no-margin-bottom">{{FirstName}} {{LastName}}</p>
-                        <p class="text-color-white no-margin">{{Email}}</p>
+                        <p class="text-color-black no-margin-bottom">{{FirstName}} {{LastName}}</p>
+                        <p class="text-color-black no-margin">{{Email}}</p>
                     </div>
                 </div>
                 <div class="list no-hairlines no-hairlines-between no-chevron margin-top-half">
@@ -40,6 +40,14 @@
                                 <div class="item-media text-color-lightgray"><i class="f7-icons icon-menu-home "></i></div>
                                 <div class="item-inner">
                                     <div class="item-title">{{@global.LANGUAGE.MENU_MSG00}}</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/fridge-settings/" class="item-link item-content panel-close">
+                                <div class="item-media text-color-lightgray"><i class="f7-icons icon-fridge-setings "></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title">{{@global.LANGUAGE.MENU_MSG12}}</div>
                                 </div>
                             </a>
                         </li>

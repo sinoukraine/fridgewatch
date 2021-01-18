@@ -1,0 +1,223 @@
+<!--suppress JSAnnotator -->
+<template>
+  <!-- Page, data-name contains page name which can be used in callbacks -->
+  <div class="page " data-name="account-settings"> <!-- page-with-subnavbar -->
+    <!-- Top Navbar -->
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner">
+        <div class="left">
+          <!--<a href="#" class="link icon-only back" >
+              <i class="if-not-ios f7-icons icon-header-arrow-back"></i>
+              <i class="if-ios icon icon-back"></i>
+          </a>-->
+          <a href="/panel-left/" class="link icon-only " >
+            <i class="if-not-ios f7-icons icon-header-menu"></i>
+            <i class="if-ios icon material-icons">menu</i>
+          </a>
+        </div>
+        <div class="title sliding">{{@global.LANGUAGE.MENU_MSG12}}</div>
+        <div class="right">
+          <label for="submit-form-fridge-settings" class="link icon-only">
+            <i class="f7-icons icon-header-apply"></i>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!--<div class="bottom-section-wrapper bottom-section-button-wrapper bg-color-white">
+        <div class="row">
+            <label for="{{CurrentFormButtonSubmit}}" class="col button button-fill color-custom elevation-2" tabindex="0">{{@global.LANGUAGE.COM_MSG06}}</label>
+        </div>
+    </div> -->
+
+
+    <form name="fridge-settings-form" class="page-content " id="fridge-settings-form">
+      <input type="submit" id="submit-form-fridge-settings" class="display-none" />
+
+      <div class="list no-hairlines no-hairlines-between">
+        <ul>
+          <li class="item-content margin-top--10">
+            <div class="item-inner no-padding-top">
+              <div class="item-title size-14">
+                <div class="item-header text-color-custom">
+                  {{@global.LANGUAGE.FRIDGE_SETTINGS_MSG07}}
+                </div>
+                {{TempAlarmLowVal}}
+              </div>
+              <div class="item-title size-14 text-align-right">
+                <div class="item-header text-color-custom">
+                  {{@global.LANGUAGE.FRIDGE_SETTINGS_MSG08}}
+                </div>
+                {{TempAlarmHighVal}}
+              </div>
+            </div>
+          </li>
+          <li class="item-row padding-horizontal">
+            <div class="item-cell item-cell-shrink-3">
+              <!-- Dual range slider with all the parameters passed via data- attributes -->
+              <div
+                id="temperature-filter"
+                class="range-slider range-slider-init color-custom temperature-filter"
+                data-label="true"
+                data-dual="true"
+                data-min="-50"
+                data-max="50"
+                data-step="1"
+                data-value-left="-10"
+                data-value-right="8"
+              ></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="list no-margin-top no-hairline-bottom">
+        <ul>
+          <li class="item-content item-input ">
+            <div class="item-media text-color-lightgray"><i class="f7-icons icon-live-voltag "></i></div>
+            <div class="item-inner">
+              <div class="item-title item-floating-label item-label">{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG03}} </div>
+              <div class="item-input-wrap ">
+                <input type="tel" name="LowBattery" value="{{LowBattery}}" placeholder="5" pattern="[0-9]*" maxlength="200" validate>
+              </div>
+            </div>
+          </li>
+          <li class="item-content item-input ">
+            <div class="item-media text-color-lightgray"><i class="f7-icons icon-fridge-input "></i></div>
+            <div class="item-inner">
+              <div class="item-title item-floating-label item-label">{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG01}} ({{@global.LANGUAGE.FRIDGE_SETTINGS_MSG06}})</div>
+              <div class="item-input-wrap ">
+                <input type="text" name="InputOne" value="{{InputOne}}" maxlength="200" placeholder="{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG01}}">
+              </div>
+            </div>
+          </li>
+          <li class="item-content item-input ">
+            <div class="item-media text-color-lightgray"> <i class="f7-icons icon-fridge-input "></i> </div>
+            <div class="item-inner">
+              <div class="item-title item-floating-label item-label">{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG02}} ({{@global.LANGUAGE.FRIDGE_SETTINGS_MSG06}})</div>
+              <div class="item-input-wrap ">
+                <input type="text" name="InputTwo" value="{{InputTwo}}" maxlength="200" placeholder="{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG02}}">
+              </div>
+            </div>
+          </li>
+          <li class="item-content item-input ">
+            <div class="item-media text-color-lightgray"> <i class="f7-icons icon-fridge-ignition "></i> </div>
+            <div class="item-inner">
+              <div class="item-title item-floating-label item-label">{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG04}} ({{@global.LANGUAGE.FRIDGE_SETTINGS_MSG06}})</div>
+              <div class="item-input-wrap ">
+                <input type="text" name="IgnitionOn" value="{{IgnitionOn}}" maxlength="200" placeholder="{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG04}}">
+              </div>
+            </div>
+          </li>
+          <li class="item-content item-input ">
+            <div class="item-media text-color-lightgray"> <i class="f7-icons icon-fridge-ignition "></i> </div>
+            <div class="item-inner">
+              <div class="item-title item-floating-label item-label">{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG05}} ({{@global.LANGUAGE.FRIDGE_SETTINGS_MSG06}})</div>
+              <div class="item-input-wrap ">
+                <input type="text" name="IgnitionOff" value="{{IgnitionOff}}" maxlength="200" placeholder="{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG05}}">
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </form>
+
+
+  </div>
+
+
+
+</template>
+
+
+<script>
+  // script must return component object
+  return {
+    data: function () {
+      var self = this;
+
+      var ret = {
+        TempAlarmLowVal: -10,
+        TempAlarmHighVal: 5
+      };
+
+
+
+      return ret;
+    },
+
+    methods: {
+      save: function(data){
+        var self = this;
+
+        /*self.$app.preloader.show();
+        self.$app.request.promise.get(API_URL.EDIT_ACCOUNT, data, 'json')
+          .then(function (result) {
+            if(result.data.MajorCode === '000') {
+              var userInfo = self.$app.methods.getFromStorage('userInfo');
+              self.$app.utils.extend(userInfo, data);
+              self.$app.methods.setInStorage({name:'userInfo', data: userInfo });
+              mainView.router.back();
+            }else if(result.data.MajorCode === '100' && result.data.MinorCode === '1002'){
+              self.$app.dialog.alert(LANGUAGE.PROMPT_MSG114);
+            }else{
+              self.$app.dialog.alert(LANGUAGE.PROMPT_MSG023 + `<br>MajorCode: ${result.data.MajorCode}<br>MinorCode: ${result.data.MinorCode}<br>${result.data.Data}`);
+            }
+
+          })
+          .finally(function () {
+            self.$app.preloader.hide();
+          })
+          .catch(function (err) {
+            console.log(err);
+            if (err && err.status === 404){
+              self.$app.dialog.alert(LANGUAGE.PROMPT_MSG002);
+            }else{
+              self.$app.dialog.alert(LANGUAGE.PROMPT_MSG003);
+            }
+          });*/
+      },
+
+    },
+
+    on: {
+      pageInit: function (e, page) {
+        var self = this;
+        var fridgeSettingsForm = page.$pageEl.find('[name = "fridge-settings-form"]');
+        var fridgeTemperatureFilter = page.$pageEl.find('.temperature-filter');
+
+        fridgeTemperatureFilter.on('range:change', function (e, range) {
+          self.$setState({
+            TempAlarmLowVal: range[0],
+            TempAlarmHighVal: range[1]
+          })
+        });
+
+        fridgeSettingsForm.on('submit', function (e) {
+          e.preventDefault();
+
+          var data = {
+            MajorToken: self.$app.data.MajorToken,
+            MinorToken: self.$app.data.MinorToken,
+            FirstName: page.$el.find('input[name="FirstName"]').val(),
+            SurName: page.$el.find('input[name="SurName"]').val(),
+            Mobile: page.$el.find('input[name="Mobile"]').val(),
+            Email: page.$el.find('input[name="Email"]').val(),
+            Address0: page.$el.find('input[name="Address0"]').val(),
+            Address1: page.$el.find('input[name="Address1"]').val(),
+            Address2: page.$el.find('input[name="Address2"]').val(),
+            Address3: page.$el.find('input[name="Address3"]').val(),
+            Address4: page.$el.find('input[name="Address4"]').val(),
+            TimeZone: page.$el.find('[name="TimeZone"]').val(),
+
+          };
+          // console.log(data);
+          self.save(data);
+
+          return false;
+        });
+      },
+    }
+  };
+</script>

@@ -271,6 +271,7 @@ window.LanguagePackages= {
 		"MENU_MSG09": "Refer a Friend",
 		"MENU_MSG10": "Contacts",
 		"MENU_MSG11": "User Guide",
+		"MENU_MSG12": "Settings",
 
 		"LOGIN_MSG00": "Login Name / Email",
 		"LOGIN_MSG01": "Password",
@@ -581,6 +582,25 @@ window.LanguagePackages= {
 		"REPORT_ADDITIONAL_OPTIONS_MSG04": "Fuel Consumed",
 		"REPORT_ADDITIONAL_OPTIONS_MSG05": "Acc2",
 		"REPORT_ADDITIONAL_OPTIONS_MSG06": "Total Mileage",
+
+		"FRIDGE_SETTINGS_MSG00": "Settings",
+		"FRIDGE_SETTINGS_MSG01": "Input One",
+		"FRIDGE_SETTINGS_MSG02": "Input Two",
+		"FRIDGE_SETTINGS_MSG03": "Low Battery (V)",
+		"FRIDGE_SETTINGS_MSG04": "Ignition On",
+		"FRIDGE_SETTINGS_MSG05": "Ignition Off",
+		"FRIDGE_SETTINGS_MSG06": "Rename",
+		"FRIDGE_SETTINGS_MSG07": "Temperature Alarm Low",
+		"FRIDGE_SETTINGS_MSG08": "Temperature Alarm High",
+
+		"COOL_ROOMS_MSG00": "Cool Rooms",
+		"COOL_ROOMS_MSG01": "Temperature Alarm Low",
+		"COOL_ROOMS_MSG02": "Temperature Alarm High",
+		"COOL_ROOMS_MSG03": "Input One",
+		"COOL_ROOMS_MSG04": "Input Two",
+		"COOL_ROOMS_MSG05": "Low Battery",
+		"COOL_ROOMS_MSG06": "Ignition On",
+		"COOL_ROOMS_MSG07": "Ignition Off",
 
 	},
 	"ua":{

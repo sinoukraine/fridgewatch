@@ -389,3 +389,12 @@
 .icon-braking:before {
   content: "\e016";
 }
+.icon-fridge-ignition:before {
+  content: "\e017";
+}
+.icon-fridge-input:before {
+  content: "\e018";
+}
+.icon-fridge-setings:before {
+  content: "\e019";
+}
