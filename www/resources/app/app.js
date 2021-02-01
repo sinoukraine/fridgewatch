@@ -83,6 +83,7 @@ API_URL.AUTOMATED_REPORT_DELETE = API_DOMIAN1 + "Device/DeleteLogBook";
 
 API_URL.GET_ASSET_RAITING = API_DOMIAN1 + "Device/DriverBehaviour";
 
+API_URL.SET_USER_ALARMSETTINGS = API_DOMIAN1 + "User/AlarmSettings";
 
 //let VirtualAssetListMain = false;
 let UpdateAssetsPosInfoTimer = false;
@@ -184,7 +185,7 @@ const app = new Framework7({
                 code: 47,
                 supportCode: 47,
                 appId: '',
-                appleId: '1505742400',
+                appleId: '1549885056',
                 appVersion: '',
                 supportPhone: '1300885461',
             },
@@ -494,6 +495,10 @@ const app = new Framework7({
                         self.methods.setInStorage({name:'contactList', data:result.data.Data.ContactList });
                         self.methods.setInStorage({name:'solutions', data:result.data.Data.Solutions });
                         self.methods.setInStorage({name:'assetTypes', data:result.data.Data.AssetTypes });
+                        if(result.data.Data.AlarmNames){
+                            self.methods.setInStorage({name:'userAlarmSettings', data:result.data.Data.AlarmNames });
+                        }
+
                         let assetListObj = self.methods.setAssetList({list: result.data.Data.AssetArray});
 
                         self.methods.setAccountSolutions(assetListObj);
@@ -854,6 +859,15 @@ const app = new Framework7({
                         }
                         break;
 
+                    case 'userAlarmSettings':
+                        str = localStorage.getItem("COM.QUIKTRAK.NEW.USERALARMSETTINGS");
+                        if(str) {
+                            ret = JSON.parse(str);
+                        }else{
+                            ret = {};
+                        }
+                        break;
+
                     default:
                         self.dialog.alert('There is no item saved with such name - '+name);
                 }
@@ -904,6 +918,9 @@ const app = new Framework7({
                         break;
                     case 'alertList':
                         localStorage.setItem("COM.QUIKTRAK.NEW.ALERTLIST", JSON.stringify(params.data));
+                        break;
+                    case 'userAlarmSettings':
+                        localStorage.setItem("COM.QUIKTRAK.NEW.USERALARMSETTINGS", JSON.stringify(params.data));
                         break;
                     case 'additionalFlags':
                         let flags = self.methods.getFromStorage(params.name);

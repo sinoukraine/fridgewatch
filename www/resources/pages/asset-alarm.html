@@ -380,6 +380,9 @@
                         SolutionType : assetList[imeiArr[0]] ? assetList[imeiArr[0]].SolutionType : '',
                         AlarmOptions: 0,
                     });
+                    self.getAlarmOptionsCoolRoom({
+                        AlarmOptions: 0,
+                    })
                 }else{
 
                     let asset = assetList[self.$route.query.imei];
@@ -406,6 +409,9 @@
 
                                             LiveAssetSettings: result.data.Data,
                                         });
+                                        self.getAlarmOptionsCoolRoom({
+                                            AlarmOptions: result.data.Data.AlertTypes,
+                                        })
                                     } else {
                                         self.loadAlarmList({
                                             AlarmListType: 2,    //live
@@ -413,7 +419,11 @@
                                             SolutionType: asset.SolutionType,
                                             AlarmOptions: asset.AlarmOptions,
                                         });
+                                        self.getAlarmOptionsCoolRoom({
+                                            AlarmOptions: asset.AlarmOptions,
+                                        })
                                     }
+
                                 })
                                 .catch(function (err) {
                                     console.log(err);
@@ -433,6 +443,9 @@
                                 AlarmOptions: asset.AlarmOptions,
 
                             });
+                            self.getAlarmOptionsCoolRoom({
+                                AlarmOptions: asset.AlarmOptions,
+                            })
                         }else{
                             self.loadAlarmList({
                                 AlarmListType: 1,     //protect
@@ -440,6 +453,9 @@
                                 SolutionType: asset.SolutionType,
                                 AlarmOptions: asset.AlarmOptions,
                             });
+                            self.getAlarmOptionsCoolRoom({
+                                AlarmOptions: asset.AlarmOptions,
+                            })
                         }
                     }
                 }
@@ -495,48 +511,81 @@
                     });
                 }
             },
-            getAlarmOptionsCoolRoom(){
+            getAlarmOptionsCoolRoom(data){
                 let self = this;
+                var userAlarmSettings = self.$app.methods.getFromStorage('userAlarmSettings');
                 let list = [
                     {
-                        val: 1,
-                        title: LANGUAGE.COOL_ROOMS_MSG01, //Temperature Alarm Low
+                        val: 4194304,
+                        state: true,
+                        //Temperature Alarm Low
+                        title: LANGUAGE.COOL_ROOMS_MSG01,
                     },
                     {
-                        val: 2,
-                        title: LANGUAGE.COOL_ROOMS_MSG02, //Temperature Alarm High
+                        val: 8388608,
+                        state: true,
+                        //Temperature Alarm High
+                        title: LANGUAGE.COOL_ROOMS_MSG02,
                     },
                     {
-                        val: 3,
-                        title: LANGUAGE.COOL_ROOMS_MSG03, //Input One
+                        val: 131072,
+                        state: true,
+                        //Input One High
+                        //title: !userAlarmSettings.Input1High ? LANGUAGE.COOL_ROOMS_MSG03 : userAlarmSettings.Input1High + '(' + LANGUAGE.COOL_ROOMS_MSG03 + ')',
+                        title: !userAlarmSettings.Input1High ? LANGUAGE.COOL_ROOMS_MSG03 : userAlarmSettings.Input1High,
                     },
                     {
-                        val: 4,
-                        title: LANGUAGE.COOL_ROOMS_MSG04, //Input Two
+                        val: 524288,
+                        state: true,
+                        //Input One Low
+                        //title: !userAlarmSettings.Input1Low ? LANGUAGE.COOL_ROOMS_MSG08 : userAlarmSettings.Input1Low + '(' + LANGUAGE.COOL_ROOMS_MSG08 + ')',
+                        title: !userAlarmSettings.Input1Low ? LANGUAGE.COOL_ROOMS_MSG08 : userAlarmSettings.Input1Low,
                     },
                     {
-                        val: 5,
-                        title: LANGUAGE.COOL_ROOMS_MSG05, //Low Battery
+                        val: 262144,
+                        state: true,
+                        //Input Two
+                        //title: !userAlarmSettings.Input2 ? LANGUAGE.COOL_ROOMS_MSG04 : userAlarmSettings.Input2 + '(' + LANGUAGE.COOL_ROOMS_MSG04 + ')',
+                        title: !userAlarmSettings.Input2 ? LANGUAGE.COOL_ROOMS_MSG04 : userAlarmSettings.Input2,
                     },
                     {
-                        val: 6,
-                        title: LANGUAGE.COOL_ROOMS_MSG06, //Ignition On
+                        val: 512,
+                        state: true,
+                        //Low Battery
+                        title: LANGUAGE.COOL_ROOMS_MSG05,
                     },
                     {
-                        val: 7,
-                        title: LANGUAGE.COOL_ROOMS_MSG07, //Ignition Off
+                        val: 32768,
+                        state: true,
+                        //Ignition On
+                        //title: !userAlarmSettings.ACCOn ? LANGUAGE.COOL_ROOMS_MSG06 : userAlarmSettings.ACCOn + '(' + LANGUAGE.COOL_ROOMS_MSG06 + ')',
+                        title: !userAlarmSettings.ACCOn ? LANGUAGE.COOL_ROOMS_MSG06 : userAlarmSettings.ACCOn,
+                    },
+                    {
+                        val: 65536,
+                        state: true,
+                        //Ignition Off
+                        //title: !userAlarmSettings.ACCOff ? LANGUAGE.COOL_ROOMS_MSG07 : userAlarmSettings.ACCOff + '(' + LANGUAGE.COOL_ROOMS_MSG07 + ')',
+                        title: !userAlarmSettings.ACCOff ? LANGUAGE.COOL_ROOMS_MSG07 : userAlarmSettings.ACCOff,
                     },
                 ]
+
                 list.sort(function(a,b){
                     if(a.title < b.title) return -1;
                     if(a.title > b.title) return 1;
                     return 0;
                 });
-                self.loadAlarmListCoolRoom(list);
+                data.list = list;
+                self.loadAlarmListCoolRoom(data);
             },
-            loadAlarmListCoolRoom(list){
+            loadAlarmListCoolRoom(data){
+                for (let i = data.list.length - 1; i >= 0; i--) {
+                    if (data.AlarmOptions & data.list[i].val) {
+                        data.list[i].state = false;
+                    }
+                }
                 this.$setState({
-                    CoolRoomAlarms: list
+                    CoolRoomAlarms: data.list
                 })
                 this.$app.utils.nextFrame(() => {
                     this.initToggleCoolRoomAlarms();
@@ -728,12 +777,12 @@
                         case 2:     //live
                             if(assetType === 'boat' || assetType === 'jetski'){
                                 ret = [
-                                    {
+                                    /*{
                                         state: true,
                                         val: 131072,
                                         title: LANGUAGE.ASSET_ALARM_MSG02, //customAlarm
-                                    },
-                                    {
+                                    },*/
+                                    /*{
                                         state: true,
                                         val: 512,
                                         title: LANGUAGE.ASSET_ALARM_MSG17, //lowBattery
@@ -747,17 +796,17 @@
                                         state: true,
                                         val: 32768,
                                         title: LANGUAGE.ASSET_ALARM_MSG11, //accOn
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 1048576,
                                         title: LANGUAGE.ASSET_ALARM_MSG03, //Shore Power Disconnect
                                     },
-                                    {
+                                    /*{
                                         state: true,
                                         val: 524288,
                                         title: LANGUAGE.ASSET_ALARM_MSG37, //Outboard Engine Removal
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 1024,
@@ -781,11 +830,11 @@
                                 ]
                             }else if(solutionType && solutionType.toLowerCase() === 'wititrack'){
                                 ret = [
-                                    {
+                                    /*{
                                         state: true,
                                         val: 131072,
                                         title: LANGUAGE.ASSET_ALARM_MSG39, //customAlarm, negative input,  witi alarm
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 1024,
@@ -801,11 +850,11 @@
                                         val: 16,
                                         title: LANGUAGE.ASSET_ALARM_MSG13, //geofenceOut
                                     },
-                                    {
+                                    /*{
                                         state: true,
                                         val: 512,
                                         title: LANGUAGE.ASSET_ALARM_MSG17, //lowBattery
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 4,
@@ -814,7 +863,7 @@
                                 ]
                             }else{
                                 ret = [
-                                    {
+                                    /*{
                                         state: true,
                                         val: 65536,
                                         title: LANGUAGE.ASSET_ALARM_MSG10, //accOff
@@ -823,17 +872,17 @@
                                         state: true,
                                         val: 32768,
                                         title: LANGUAGE.ASSET_ALARM_MSG11, //accOn
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 1048576,
                                         title: LANGUAGE.ASSET_ALARM_MSG20, //custom2LowAlarm
                                     },
-                                    {
+                                    /*{
                                         state: true,
                                         val: 131072,
                                         title: LANGUAGE.ASSET_ALARM_MSG22, //customAlarm
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 1024,
@@ -854,11 +903,11 @@
                                         val: 128,
                                         title: LANGUAGE.ASSET_ALARM_MSG27, //illegalIgnition
                                     },
-                                    {
+                                    /*{
                                         state: true,
                                         val: 512,
                                         title: LANGUAGE.ASSET_ALARM_MSG17, //lowBattery
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 4,
@@ -892,12 +941,12 @@
                         case 3:     // loc8
                             if(assetType === 'boat' || assetType === 'jetski'){
                                 ret = [
-                                    {
+                                    /*{
                                         state: true,
                                         val: 131072,
                                         title: LANGUAGE.ASSET_ALARM_MSG02, //customAlarm
-                                    },
-                                    {
+                                    },*/
+                                    /*{
                                         state: true,
                                         val: 32768,
                                         title: LANGUAGE.ASSET_ALARM_MSG11, //accOn
@@ -906,7 +955,7 @@
                                       state: true,
                                       val: 65536,
                                       title: LANGUAGE.ASSET_ALARM_MSG10, //accOff
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 1048576,
@@ -922,19 +971,19 @@
                                         val: 4,
                                         title: LANGUAGE.ASSET_ALARM_MSG09, //power
                                     },
-                                    {
+                                    /*{
                                       state: true,
                                       val: 512,
                                       title: LANGUAGE.ASSET_ALARM_MSG17, //lowBattery
-                                    },
+                                    },*/
                                 ]
                             }else{
                                 ret = [
-                                    {
+                                   /* {
                                         state: true,
                                         val: 131072,
                                         title: LANGUAGE.ASSET_ALARM_MSG25, //input
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 1024,
@@ -945,7 +994,7 @@
                                         val: 256,
                                         title: LANGUAGE.ASSET_ALARM_MSG07, //tilt
                                     },
-                                    {
+                                    /*{
                                         state: true,
                                         val: 65536,
                                         title: LANGUAGE.ASSET_ALARM_MSG10, //accOff
@@ -954,27 +1003,27 @@
                                         state: true,
                                         val: 32768,
                                         title: LANGUAGE.ASSET_ALARM_MSG11, //accOn
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 16384,
                                         title: LANGUAGE.ASSET_ALARM_MSG08, //impact
                                     },
-                                    {
+                                    /*{
                                         state: true,
                                         val: 512,
                                         title: LANGUAGE.ASSET_ALARM_MSG17, //lowBattery
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 4,
                                         title: LANGUAGE.ASSET_ALARM_MSG09, //power
                                     },
-                                    {
+                                    /*{
                                         state: true,
                                         val: 262144,
                                         title: LANGUAGE.ASSET_ALARM_MSG34, //positive input on
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 1048576,
@@ -988,12 +1037,12 @@
                         default:    //protect
                             if(assetType === 'boat' || assetType === 'jetski'){
                                 ret = [
-                                    {
+                                    /*{
                                         state: true,
                                         val: 131072,
                                         title: LANGUAGE.ASSET_ALARM_MSG02, //customAlarm
-                                    },
-                                    {
+                                    },*/
+                                    /*{
                                         state: true,
                                         val: 32768,
                                         title: LANGUAGE.ASSET_ALARM_MSG11, //accOn
@@ -1002,7 +1051,7 @@
                                       state: true,
                                       val: 65536,
                                       title: LANGUAGE.ASSET_ALARM_MSG10, //accOff
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 1048576,
@@ -1018,20 +1067,20 @@
                                         val: 4,
                                         title: LANGUAGE.ASSET_ALARM_MSG09, //power
                                     },
-                                    {
+                                    /*{
                                       state: true,
                                       val: 512,
                                       title: LANGUAGE.ASSET_ALARM_MSG17, //lowBattery
-                                    },
+                                    },*/
                                 ]
                             }else if(solutionType && solutionType.toLowerCase() === 'witiprotect' ||
                                     solutionType && solutionType.toLowerCase() === 'witiqprotect'){
                                 ret = [
-                                    {
+                                    /*{
                                         state: true,
                                         val: 131072,
                                         title: LANGUAGE.ASSET_ALARM_MSG39, //negative input,  witi alarm
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 1024,
@@ -1055,11 +1104,11 @@
                                 ];
                             }else{
                                 ret = [
-                                    {
+                                    /*{
                                         state: true,
                                         val: 131072,
                                         title: LANGUAGE.ASSET_ALARM_MSG25, //input
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 1024,
@@ -1070,7 +1119,7 @@
                                         val: 256,
                                         title: LANGUAGE.ASSET_ALARM_MSG07, //tilt
                                     },
-                                    {
+                                    /*{
                                         state: true,
                                         val: 65536,
                                         title: LANGUAGE.ASSET_ALARM_MSG10, //accOff
@@ -1079,17 +1128,17 @@
                                         state: true,
                                         val: 32768,
                                         title: LANGUAGE.ASSET_ALARM_MSG11, //accOn
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 16384,
                                         title: LANGUAGE.ASSET_ALARM_MSG08, //impact
                                     },
-                                    {
+                                    /*{
                                         state: true,
                                         val: 512,
                                         title: LANGUAGE.ASSET_ALARM_MSG17, //lowBattery
-                                    },
+                                    },*/
                                     {
                                         state: true,
                                         val: 4,
@@ -1101,7 +1150,7 @@
                     }
                 }
                 if (ret.length) {
-                    if(solutionType && solutionType.toLowerCase() === 'witiprotect' ||
+                    /*if(solutionType && solutionType.toLowerCase() === 'witiprotect' ||
                       solutionType && solutionType.toLowerCase() === 'wititrack' ||
                       solutionType && solutionType.toLowerCase() === 'witiqprotect'){
                         if(this.isPositiveInputSupported){
@@ -1115,7 +1164,7 @@
                                 title: LANGUAGE.ASSET_ALARM_MSG42, //witi armed
                             })
                         }
-                    }
+                    }*/
 
                     ret.sort(function(a,b){
                         if(a.title < b.title) return -1;
@@ -1128,7 +1177,7 @@
             saveAlarmOptions: function(data, url){
                 let self = this;
 
-                self.$app.dialog.progress(LANGUAGE.COM_MSG004,'red');
+                self.$app.dialog.progress(LANGUAGE.COM_MSG004,'custom');
                 self.$app.request.promise.post(url, data, 'json')
                     .then(function (result) {
                         //console.log(result);
@@ -1241,7 +1290,7 @@
                 let form = page.$el.find('[name = "AssetAlarmForm"]');
 
                 self.getAlarmOptions();
-                self.getAlarmOptionsCoolRoom()
+                //self.getAlarmOptionsCoolRoom()
 
                 form.on('change', '.disablingController',function(e){
                     let parent = this.closest('.list');
@@ -1290,6 +1339,7 @@
                     e.preventDefault();
                     //let userInfo = self.$app.methods.getFromStorage('userInfo');
                     let checkboxes = page.$el.find('[name = "checkbox-alarm"]');
+                    let checkboxesCoolroom = page.$el.find('[name = "checkbox-coolroom"]');
                     let offlineOptions = page.$el.find('[name = "offline-option"]');
                     let url = API_URL.SET_ALARM_LOC8;
                     //console.log(offlineOptions);
@@ -1303,6 +1353,11 @@
                     for (let i = checkboxes.length - 1; i >= 0; i--) {
                         if (!checkboxes[i].checked) {
                             data.alarmOptions += parseInt(checkboxes[i].value, 10);
+                        }
+                    }
+                    for (let i = checkboxesCoolroom.length - 1; i >= 0; i--) {
+                        if (!checkboxesCoolroom[i].checked) {
+                            data.alarmOptions += parseInt(checkboxesCoolroom[i].value, 10);
                         }
                     }
 

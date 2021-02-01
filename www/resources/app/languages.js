@@ -584,7 +584,7 @@ window.LanguagePackages= {
 		"REPORT_ADDITIONAL_OPTIONS_MSG06": "Total Mileage",
 
 		"FRIDGE_SETTINGS_MSG00": "Settings",
-		"FRIDGE_SETTINGS_MSG01": "Input One",
+		"FRIDGE_SETTINGS_MSG01": "Input One High",
 		"FRIDGE_SETTINGS_MSG02": "Input Two",
 		"FRIDGE_SETTINGS_MSG03": "Low Battery (V)",
 		"FRIDGE_SETTINGS_MSG04": "Ignition On",
@@ -592,15 +592,17 @@ window.LanguagePackages= {
 		"FRIDGE_SETTINGS_MSG06": "Rename",
 		"FRIDGE_SETTINGS_MSG07": "Temperature Alarm Low",
 		"FRIDGE_SETTINGS_MSG08": "Temperature Alarm High",
+		"FRIDGE_SETTINGS_MSG09": "Input One Low",
 
 		"COOL_ROOMS_MSG00": "Cool Rooms",
 		"COOL_ROOMS_MSG01": "Temperature Alarm Low",
 		"COOL_ROOMS_MSG02": "Temperature Alarm High",
-		"COOL_ROOMS_MSG03": "Input One",
+		"COOL_ROOMS_MSG03": "Input One High",
 		"COOL_ROOMS_MSG04": "Input Two",
 		"COOL_ROOMS_MSG05": "Low Battery",
 		"COOL_ROOMS_MSG06": "Ignition On",
 		"COOL_ROOMS_MSG07": "Ignition Off",
+		"COOL_ROOMS_MSG08": "Input One Low",
 
 	},
 	"ua":{

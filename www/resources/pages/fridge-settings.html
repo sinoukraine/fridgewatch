@@ -43,13 +43,13 @@
                 <div class="item-header text-color-custom">
                   {{@global.LANGUAGE.FRIDGE_SETTINGS_MSG07}}
                 </div>
-                {{TempAlarmLowVal}}
+                {{TempLow}}
               </div>
               <div class="item-title size-14 text-align-right">
                 <div class="item-header text-color-custom">
                   {{@global.LANGUAGE.FRIDGE_SETTINGS_MSG08}}
                 </div>
-                {{TempAlarmHighVal}}
+                {{TempHigh}}
               </div>
             </div>
           </li>
@@ -79,7 +79,7 @@
             <div class="item-inner">
               <div class="item-title item-floating-label item-label">{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG03}} </div>
               <div class="item-input-wrap ">
-                <input type="tel" name="LowBattery" value="{{LowBattery}}" placeholder="5" pattern="[0-9]*" maxlength="200" validate>
+                <input type="tel" name="BatteryLow" value="{{BatteryLow}}" placeholder="5" pattern="[0-9]*" maxlength="200" validate>
               </div>
             </div>
           </li>
@@ -88,7 +88,16 @@
             <div class="item-inner">
               <div class="item-title item-floating-label item-label">{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG01}} ({{@global.LANGUAGE.FRIDGE_SETTINGS_MSG06}})</div>
               <div class="item-input-wrap ">
-                <input type="text" name="InputOne" value="{{InputOne}}" maxlength="200" placeholder="{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG01}}">
+                <input type="text" name="Input1High" value="{{Input1High}}" maxlength="200" placeholder="{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG01}}">
+              </div>
+            </div>
+          </li>
+          <li class="item-content item-input ">
+            <div class="item-media text-color-lightgray"><i class="f7-icons icon-fridge-input "></i></div>
+            <div class="item-inner">
+              <div class="item-title item-floating-label item-label">{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG09}} ({{@global.LANGUAGE.FRIDGE_SETTINGS_MSG06}})</div>
+              <div class="item-input-wrap ">
+                <input type="text" name="Input1Low" value="{{Input1Low}}" maxlength="200" placeholder="{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG09}}">
               </div>
             </div>
           </li>
@@ -97,7 +106,7 @@
             <div class="item-inner">
               <div class="item-title item-floating-label item-label">{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG02}} ({{@global.LANGUAGE.FRIDGE_SETTINGS_MSG06}})</div>
               <div class="item-input-wrap ">
-                <input type="text" name="InputTwo" value="{{InputTwo}}" maxlength="200" placeholder="{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG02}}">
+                <input type="text" name="Input2" value="{{Input2}}" maxlength="200" placeholder="{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG02}}">
               </div>
             </div>
           </li>
@@ -106,7 +115,7 @@
             <div class="item-inner">
               <div class="item-title item-floating-label item-label">{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG04}} ({{@global.LANGUAGE.FRIDGE_SETTINGS_MSG06}})</div>
               <div class="item-input-wrap ">
-                <input type="text" name="IgnitionOn" value="{{IgnitionOn}}" maxlength="200" placeholder="{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG04}}">
+                <input type="text" name="ACCOn" value="{{ACCOn}}" maxlength="200" placeholder="{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG04}}">
               </div>
             </div>
           </li>
@@ -115,7 +124,7 @@
             <div class="item-inner">
               <div class="item-title item-floating-label item-label">{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG05}} ({{@global.LANGUAGE.FRIDGE_SETTINGS_MSG06}})</div>
               <div class="item-input-wrap ">
-                <input type="text" name="IgnitionOff" value="{{IgnitionOff}}" maxlength="200" placeholder="{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG05}}">
+                <input type="text" name="ACCOff" value="{{ACCOff}}" maxlength="200" placeholder="{{@global.LANGUAGE.FRIDGE_SETTINGS_MSG05}}">
               </div>
             </div>
           </li>
@@ -136,14 +145,14 @@
   return {
     data: function () {
       var self = this;
-
+      var userAlarmSettings = self.$app.methods.getFromStorage('userAlarmSettings');
       var ret = {
-        TempAlarmLowVal: -10,
-        TempAlarmHighVal: 5
+        TempLow: -10,
+        TempHigh: 5,
       };
-
-
-
+      if (!self.$app.methods.isObjEmpty(userAlarmSettings)){
+        ret = userAlarmSettings
+      }
       return ret;
     },
 
@@ -151,16 +160,12 @@
       save: function(data){
         var self = this;
 
-        /*self.$app.preloader.show();
-        self.$app.request.promise.get(API_URL.EDIT_ACCOUNT, data, 'json')
+        self.$app.preloader.show();
+        self.$app.request.promise.post(API_URL.SET_USER_ALARMSETTINGS, data, 'json')
           .then(function (result) {
             if(result.data.MajorCode === '000') {
-              var userInfo = self.$app.methods.getFromStorage('userInfo');
-              self.$app.utils.extend(userInfo, data);
-              self.$app.methods.setInStorage({name:'userInfo', data: userInfo });
+              self.$app.methods.setInStorage({name:'userAlarmSettings', data: result.data.Data });
               mainView.router.back();
-            }else if(result.data.MajorCode === '100' && result.data.MinorCode === '1002'){
-              self.$app.dialog.alert(LANGUAGE.PROMPT_MSG114);
             }else{
               self.$app.dialog.alert(LANGUAGE.PROMPT_MSG023 + `<br>MajorCode: ${result.data.MajorCode}<br>MinorCode: ${result.data.MinorCode}<br>${result.data.Data}`);
             }
@@ -176,7 +181,7 @@
             }else{
               self.$app.dialog.alert(LANGUAGE.PROMPT_MSG003);
             }
-          });*/
+          });
       },
 
     },
@@ -189,8 +194,8 @@
 
         fridgeTemperatureFilter.on('range:change', function (e, range) {
           self.$setState({
-            TempAlarmLowVal: range[0],
-            TempAlarmHighVal: range[1]
+            TempLow: range[0],
+            TempHigh: range[1]
           })
         });
 
@@ -200,17 +205,14 @@
           var data = {
             MajorToken: self.$app.data.MajorToken,
             MinorToken: self.$app.data.MinorToken,
-            FirstName: page.$el.find('input[name="FirstName"]').val(),
-            SurName: page.$el.find('input[name="SurName"]').val(),
-            Mobile: page.$el.find('input[name="Mobile"]').val(),
-            Email: page.$el.find('input[name="Email"]').val(),
-            Address0: page.$el.find('input[name="Address0"]').val(),
-            Address1: page.$el.find('input[name="Address1"]').val(),
-            Address2: page.$el.find('input[name="Address2"]').val(),
-            Address3: page.$el.find('input[name="Address3"]').val(),
-            Address4: page.$el.find('input[name="Address4"]').val(),
-            TimeZone: page.$el.find('[name="TimeZone"]').val(),
-
+            TempLow: self.TempLow,
+            TempHigh: self.TempHigh,
+            BatteryLow: page.$el.find('input[name="BatteryLow"]').val(),
+            Input1Low: page.$el.find('input[name="Input1Low"]').val(),
+            Input1High: page.$el.find('input[name="Input1High"]').val(),
+            Input2: page.$el.find('input[name="Input2"]').val(),
+            ACCOn: page.$el.find('input[name="ACCOn"]').val(),
+            ACCOff: page.$el.find('input[name="ACCOff"]').val()
           };
           // console.log(data);
           self.save(data);
