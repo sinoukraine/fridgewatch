@@ -137,7 +137,7 @@ const app = new Framework7({
             logo: 'resources/images/logo.svg',
             logoBlack: 'resources/images/logo-black.svg',
             logoModal: 'resources/images/logo-black.svg',
-            logoExternal: 'https://helper.quiktrak.com.au/logo/quiktrak/logo.png',
+            logoExternal: 'https://helper.quiktrak.com.au/logo/fridgewatch/logo.png',
             MaxMapPopupWidth: maxPopupWidth,
             PolygonCustomization: {
                 color: '#AA5959',
